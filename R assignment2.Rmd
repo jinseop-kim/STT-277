@@ -1,0 +1,62 @@
+---
+title: "STT 277 HW"
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Homework
+
+
+#1 read dat file (row name = id)
+```{r }
+glass<-read.delim("glass.dat", header=T, row.names=1)
+```
+
+#2 check 100, and histogram
+```{r}
+s_glass<-NA
+for(i in 1:214){
+  s_glass[i]<-sum(glass[i,2:9])
+}
+
+# the sum of these are not 100
+hist(s_glass) # The center of the histogram is around 99.8-100. It seems about 0.1-0.2% deviated from 100%
+```
+
+#3 Average Percent of Oxidies
+```{r}
+new_glass<-glass[, 2:9]; mean_glass<-apply(new_glass,2,mean, na.rm=T);mean_glass
+barplot(mean_glass) #average percentages oxides
+```
+Si is the major component on average. It is about 72.6%.
+
+#4 model, summary, anova
+```{r}
+fm<-lm(Refr~., data=glass)
+summary(fm); anova(fm)
+```
+I think from the Summary, it shows the multivariate linear regression model's coefficients for each factor and its standard error. t-value and p-value show the power of the factor in the model. So for example, Na is not good estimator because it s pvalue is 0.36 which is pretty big, but Ca is a good factor that rejects the null hypothesis(coefficient of Ca =0 ).R-square shows the fitness of the model and adjusted r square is that because we use some more factors to predict it adjusted some power.
+
+From the Anova table, I think it analyzes the variance of each factor, among the total variation for each factor, some part is estimated by the factor and the other part is not able to estimate. So F test value shows the power of estimation by variations.
+
+#5
+```{r}
+vec<-scan(file="vec.dat")
+plot(vec);hist(vec)
+mat<-matrix(vec,3000,3, byrow=T)
+mydata<-data.frame(mat); colnames(mydata)<-c("x","y","z")
+
+```
+It looks random. The distribution seems like the uniform distribution
+
+#6
+```{r}
+library(lattice)
+quartz()
+cloud(z~x+y, data=mydata)
+```
