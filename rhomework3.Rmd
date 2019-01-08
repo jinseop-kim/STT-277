@@ -1,0 +1,46 @@
+---
+title: "R homework3"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#1 import data and print week=16
+```{r}
+results<-read.delim("results.dat", header=T)
+info<-read.delim("info.dat",header=T)
+new_results<-merge(results,info, by="ID")
+week16<-subset(new_results, Week==16); week16
+```
+#2 
+```{r}
+fm<-lm(Y~ Trt, data=week16)
+aov(fm); summary(fm)
+```
+I think the treatment works at a=0.05, however, the data shows the treatment 5000 unit and placebo are not that different.
+
+#3
+```{r}
+results_wide<-reshape(results, idvar="ID", direction="wide",v.names="Y",timevar="Week")
+results_wide
+```
+
+#4
+```{r}
+merge(results_wide, info, by="ID")
+```
+
+
+
+
+
+
+
+
+
+
+
