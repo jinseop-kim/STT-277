@@ -1,0 +1,70 @@
+---
+title: "EDA-3"
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+# 1 read, change dose to a factor, summary
+```{r}
+setwd("~/Desktop/class/STT277")
+pigs<-read.table("Pigs.dat", sep="", header=T)
+pigs$Dose<-as.factor(pigs$Dose)
+summary(pigs)
+```
+
+#2
+```{r}
+library("lattice")
+bwplot(Len~Dose|Delivery, data=pigs)
+```
+Yes. There is a difference between OJ and VC. Median values and interquatile ranges are all different. Also, the length of whiskers are different. At 0.5 and 1 dose, OJ has higher values but more variations. At 2, VC has more variation.
+
+#3
+```{r}
+stripplot(Len~Dose|Delivery, data=pigs,jitter=T)
+```
+First thing is jitter makes the points are not overlapped and makes points spreaded randomly within the range of the point so it makes easier to read the points.
+
+Second, we can see where many points are gathered and see the variations of Len for each Does level.
+
+# part B
+```{r}
+scots<-read.delim("scots.dat")
+```
+# 4
+```{r}
+df<-scots
+df$sc<-as.factor(df$sc) #a
+df$j_attain<-jitter(df$attain) #b
+summary(df$j_attain) #c
+````
+
+# 5
+```{r}
+xyplot(vrq~j_attain, groups=sc, cex=0.1, data=df,span=5,family="symmetric", type=c("smooth", "p"),lwd=2,auto.key=list(lines=T, border=T))
+
+```
+From the chart, verbal reasoning and attainment scores have positive relationship. But the chart also shows that even though someone has lower social status, it does not mean he would have lower scores. we can see that the highest line is sc=1 at j_attain 10.
+
+
+#6 interpret
+```{R}
+mosaicplot(~attain + sc , data=df, color = 2:5)
+```
+The mosaic plot shows each social class and each attaiment score. So you can find that there are more lower social class people at lower attainment score and when you see higher attainment score, the lower social class people's proportions are decreasing. The masaic plot shows well about proportion for each variable.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
