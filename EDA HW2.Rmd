@@ -1,0 +1,77 @@
+---
+title: "EDA assignment 2"
+output:
+  html_document: default
+  pdf_document: default
+  word_document: default
+---
+
+## 1 stem and leaf
+```{r}
+num<-c(1.0, 1.0, 1.2, 1.8, 2.0, 2.1, 2.3, 2.5, 2.5, 3.0, 3.1, 3.7, 3.8 ,3.9 , 4.2 ,4.6,5.5, 5.6,7.7,9.7)
+stem(num, scale=2)
+mean(num);median(num)
+setwd("~/Desktop")
+load("Assn2.RData")
+library(lattice)
+```
+mean = 3.56, median=3.05
+
+## 2 histogram with well known fact
+```{r}
+histogram(~Temp|Loc, data=RocSFCleve)
+
+```
+Comparing the histogram with the well-known fact described, Cleveland and Rochester have cold weather days on histogram, which should be winter season. And Sanfrancisco histogram shows that almost days' temperature is between 40 to 70, little variation compared to other two cities. Also, the most highest temperature is about 80 F so they do not distintively different summer temperature
+
+
+## 3 interpret bwplot
+```{r}
+bwplot(Temp~Loc, data=RocSFCleve)
+```
+Clevland and Rochester's weather looks similar. they have similar interquatile range and similar whisker length. Sanfracisco's temperature seems they have little variation. Therefore, SF has small interquatile range and small length of whisker. I guess because SF weather is stable, the summer temperature considered as outliers.
+
+
+## 4 interpret violin plot
+```{R}
+bwplot(Temp ~ Loc, panel="panel.violin", data=RocSFCleve)
+
+library(dplyr); library(plotly)
+RocSFCleve %>% plot_ly(
+  x=~Loc, y=~Temp, split=~Loc, type='violin',
+  box= list(visible=T), meanline=list(visible=T)
+) %>% layout(yaxis=list(title="", zeroline=T))
+```
+from the violin plot, we can see 95% confidence interval, interquatile range with mean and median point. Also, wider area means higher probability.
+SF weather seems the mean and median are similar and that point has the highest probability too, which means most days are around mean temperature. But, Rochester and Clevland's temperatures have large variation during a year. And they seem bimodal. It would be because of seasonal effects
+
+## 5 interpret density plot
+```{r}
+densityplot(~Temp, groups=Loc, auto.key=T, data=RocSFCleve)
+```
+Again, it shows Cleveland and Rochester have wide variations compared to SF weather. Also, as the violin plot shows, most days of sanfrancisco's temperature are distributed close to mean, but the temperature of Rochester and Cleveland are widely distributed, so density line seems flat compared to SF line.
+
+## 6 interpret QQplots & well-known facts. what other details?
+```{r}
+SF<-RocSFCleve$Temp[RocSFCleve$Loc == "SF"]
+Roch<-RocSFCleve$Temp[RocSFCleve$Loc =="Roch"]
+Cleve<-RocSFCleve$Temp[RocSFCleve$Loc =="Cleve"]
+quartz()
+qqplot(Roch, Cleve); abline(0,1)
+quartz()
+qqplot(Roch, SF); abline(0,1)
+```
+From the qqplot between Rochester and Cleveland, it shows that they have almost similar temperature and they are normally distributed.
+But, the qqplot between Rochester and Sanfrancisco shows that when Rochester is cold, like around 0 to 20 F, Sanfrancisco's temperature are 40-50 F. when Rochester is hot, SF also has hot weather, but abline shows that the distribution is not normally distributed.
+
+
+
+
+
+
+
+
+
+
+
+
